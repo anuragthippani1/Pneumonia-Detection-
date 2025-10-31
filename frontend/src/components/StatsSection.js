@@ -4,6 +4,7 @@ import axios from "axios";
 function StatsSection() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8000";
 
   useEffect(() => {
     fetchStats();
@@ -11,7 +12,7 @@ function StatsSection() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/stats");
+      const response = await axios.get(`${API_BASE}/stats`);
       setStats(response.data);
     } catch (error) {
       console.error("Failed to fetch stats:", error);
@@ -128,3 +129,4 @@ function StatsSection() {
 }
 
 export default StatsSection;
+

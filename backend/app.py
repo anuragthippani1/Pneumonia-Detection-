@@ -16,7 +16,12 @@ from utils import (
 # Initialize Flask app
 app = Flask(__name__)
 app.config.from_object(Config)
-CORS(app)
+# Configure CORS for production domains if provided
+allowed_origin = os.environ.get("FRONTEND_URL")
+if allowed_origin:
+    CORS(app, resources={r"/*": {"origins": [allowed_origin]}})
+else:
+    CORS(app)
 
 # Create upload folder
 create_upload_folder()
@@ -161,10 +166,12 @@ def get_stats():
         return jsonify({'error': f'Failed to fetch stats: {str(e)}'}), 500
 
 if __name__ == '__main__':
-    print(f"🚀 Starting Flask server on port {Config.BACKEND_PORT}")
+    port = int(os.environ.get("PORT", Config.BACKEND_PORT))
+    debug = os.environ.get("FLASK_DEBUG", "1") == "1"
+    print(f"🚀 Starting Flask server on port {port}")
     app.run(
         host='0.0.0.0',
-        port=Config.BACKEND_PORT,
-        debug=True
+        port=port,
+        debug=debug
     )
 

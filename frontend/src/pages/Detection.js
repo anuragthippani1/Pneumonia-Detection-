@@ -11,6 +11,8 @@ function Detection() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
+  const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8000";
+
   const handleFileSelect = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -36,7 +38,7 @@ function Detection() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/predict",
+        `${API_BASE}/predict`,
         formData,
         {
           headers: {
